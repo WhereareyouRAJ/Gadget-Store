@@ -1,0 +1,29 @@
+#Build Stage
+
+FROM eclipse-temurin:21-jdk-alpine AS build
+WORKDIR /app
+RUN apk add --no-cache wget
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
+
+RUN chmod +x mvnw && sed -i 's/\r$//' mvnw
+RUN ./mvnw dependency:go-offline -B -q
+
+COPY src ./src
+
+RUN ./mvnw clean package -DskipTests 
+
+# Package Stage
+
+FROM eclipse-temurin:21-jre-alpine
+RUN apk add --no-cache wget
+ENV JAVA_TOOL_OPTIONS=
+ENV SPRING_PROFILES_ACTIVE=prod
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

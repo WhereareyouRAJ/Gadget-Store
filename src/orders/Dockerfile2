@@ -1,0 +1,30 @@
+#Stage 1 : Build Stage
+FROM eclipse-temurin:21-jdk-alpine AS build
+RUN apk add --no-cache wget
+WORKDIR /app
+
+COPY .mvn/ .mvn/
+COPY  mvnw pom.xml ./
+
+RUN chmod +x mvnw && sed -i 's/\r$//' mvnw
+COPY src ./src
+
+RUN ./mvnw clean package -DskipTests -q && \
+     mv target/*.jar app.jar
+
+#Stage 2 : Package Stage
+FROM eclipse-temurin:21-jre-alpine
+RUN apk add --no-cache wget
+WORKDIR /app
+
+ENV JAVA_TOOL_OPTIONS=
+ENV SPRING_PROFILES_ACTIVE=prod
+
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
+COPY --from=build /app/app.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT [ "java", "-jar", "/app/app.jar" ]

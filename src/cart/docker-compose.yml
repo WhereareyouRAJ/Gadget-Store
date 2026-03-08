@@ -30,8 +30,7 @@ services:
       retries: 3
       start_period: 15s
     depends_on:
-      carts-db:
-        condition: service_healthy
+      - carts-db
 
   carts-db:
     image: amazon/dynamodb-local:1.20.0

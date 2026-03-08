@@ -33,5 +33,4 @@ services:
       - RETAIL_CHECKOUT_ENDPOINTS_ORDERS=http://orders:8080
   checkout-redis:
     ports: !override []
-  rabbitmq:
-    ports: !override []
+  

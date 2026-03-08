@@ -17,6 +17,7 @@ WORKDIR /appsrc
 ENV GOPROXY=https://goproxy.io,direct
 
 COPY go.mod go.sum ./
+ENV GOPROXY=https://proxy.golang.org,direct
 RUN go mod download
 
 COPY . .

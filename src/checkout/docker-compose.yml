@@ -22,8 +22,7 @@ services:
       timeout: 10s
       retries: 3
     depends_on:
-      checkout-redis:
-        condition: service_healthy
+      - checkout-redis
     develop:
       watch:
         - action: rebuild

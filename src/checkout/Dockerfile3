@@ -1,0 +1,23 @@
+#Stage 1 : Build Stage
+FROM node:20-alpine AS builder
+RUN apk add --no-cache wget
+WORKDIR /app
+
+COPY .yarnrc.yml package.json yarn.lock ./
+COPY .yarn/ .yarn/
+
+RUN yarn install --immutable
+
+COPY . .
+
+RUN yarn build 
+
+# Stage 2 : Package Stage
+FROM node:20-alpine 
+RUN apk add --no-cache wget
+WORKDIR /app
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+
+ENTRYPOINT [ "node", "dist/main.js" ]

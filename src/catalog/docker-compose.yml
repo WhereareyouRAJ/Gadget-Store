@@ -4,9 +4,8 @@ services:
       context: .
     hostname: catalog
     depends_on:
-      catalog-db:
-        condition: service_healthy
-        restart: true
+      - catalog-db
+        
     restart: always
     cap_drop:
       - all
@@ -16,7 +15,9 @@ services:
       - GIN_MODE=release
       - reschedule=on-node-failure
       - RETAIL_CATALOG_PERSISTENCE_PROVIDER=mysql
-      - RETAIL_CATALOG_PERSISTENCE_PASSWORD=${DB_PASSWORD}
+      - RETAIL_CATALOG_PERSISTENCE_PASSWORD=12345
+      - RETAIL_CATALOG_PERSISTENCE_USERNAME=catalog_user
+      - RETAIL_CATALOG_PERSISTENCE_NAME=catalogdb
       - RETAIL_CATALOG_PERSISTENCE_ENDPOINT=catalog-db:3306
     ports:
       - "8081:8080"
@@ -39,11 +40,11 @@ services:
       - no-new-privileges:true
     environment:
       - reschedule=on-node-failure
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=12345
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
       - MYSQL_DATABASE=catalogdb
       - MYSQL_USER=catalog_user
-      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_PASSWORD=12345
     healthcheck:
       test:
         [
@@ -54,7 +55,7 @@ services:
           "localhost",
           "-u",
           "catalog_user",
-          "-p${DB_PASSWORD}",
+          "-p12345",
         ]
       interval: 10s
       timeout: 5s

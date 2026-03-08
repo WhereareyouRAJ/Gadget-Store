@@ -1,0 +1,23 @@
+#Stage 1 : Build Stage
+FROM golang:1.24-alpine AS build
+RUN apk add --no-cache wget
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+COPY . .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o main main.go
+
+#Stage 2 : Final Stage
+FROM scratch
+RUN apk add --no-cache wget
+WORKDIR /app
+
+COPY --from=build /app/main /app/
+
+ENV GIN_MODE=release
+
+ENTRYPOINT [ "/app/main"]
