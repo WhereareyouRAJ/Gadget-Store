@@ -1,0 +1,134 @@
+name: Build UI Service
+
+on: 
+  push:
+    branches: ["main"]
+
+jobs:
+  ui: 
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Login to  Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/ui/
+          push: true
+          tags: rajsingh8826/ui:latest
+  orders: 
+    runs-on: ubuntu-latest
+    needs: ui
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Login to  Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/orders/
+          push: true
+          tags: rajsingh8826/orders:latest     
+  
+  checkout: 
+    runs-on: ubuntu-latest
+    needs: orders
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Login to  Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/checkout/
+          push: true
+          tags: rajsingh8826/checkout:latest
+  
+  catalog: 
+    runs-on: ubuntu-latest
+    needs: checkout
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Login to  Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/catalog/
+          push: true
+          tags: rajsingh8826/catalog:latest
+  
+  cart: 
+    runs-on: ubuntu-latest
+    needs: catalog
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Login to  Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/cart/
+          push: true
+          tags: rajsingh8826/cart:latest
