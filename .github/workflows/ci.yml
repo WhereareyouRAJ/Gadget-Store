@@ -52,7 +52,8 @@ jobs:
           
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           git add .
-          git commit -m "chore: Update $ {{ matrix.service }} image to ${{ github.sha }} [skip ci]" 
+          git commit -m "chore: Update $ {{ matrix.service }} image to ${{ github.sha }} [skip ci]"
+          git pull --rebase origin main 
           git push -u origin main
