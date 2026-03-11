@@ -14,7 +14,7 @@ spec:
     spec: 
       containers: 
       - name: orders
-        image: rajsingh8826/orders:latest
+        image: rajsingh8826/orders:2fd67f9049d94cd83895c8145dbbfd2b24a045f5
         env: 
         - name: RETAIL_ORDERS_PERSISTENCE_ENDPOINT
           value: "orders-db:5432"
