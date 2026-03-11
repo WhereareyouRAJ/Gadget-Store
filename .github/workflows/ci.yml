@@ -55,5 +55,8 @@ jobs:
 
           git add .
           git commit -m "chore: Update $ {{ matrix.service }} image to ${{ github.sha }} [skip ci]"
-          git pull --rebase origin main 
+          
+          for i in {1..5}; do
+            git pull --rebase origin main && git push origin main && break || sleep 5
+          done
           git push -u origin main
