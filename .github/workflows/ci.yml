@@ -50,8 +50,9 @@ jobs:
       - name: Helm Upgrade
         run: |
           helm upgrade --install ${{ matrix.service }} ./Helm-charts/retail-app \
-            --set global.image.tag=${{ github.sha }} \
-            --values ./Helm-charts/retail-app/values.yaml \
-            --namespace default --create-namespace --debug --dry-run
+          --set global.image.tag=${{ github.sha }} \
+          --values ./Helm-charts/retail-app/values.yaml \
+          --dry-run=server --output=yaml # <--- THE "DEEP" SIMULATION FIX
+
           
           echo "CD Simulation: Successfully generated Helm manifest for ${{ matrix.service }} with tag ${{ github.sha }}"
