@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: carts
-          image: rajsingh8826/cart:latest
+          image: rajsingh8826/cart:2fd67f9049d94cd83895c8145dbbfd2b24a045f5
           env: 
           - name: SERVER_TOMCAT_ACCESSLOG_ENABLED
             value: "true"
