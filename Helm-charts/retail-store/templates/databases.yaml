@@ -1,4 +1,4 @@
-{{- if .Values.hasDatabase }}
+{{- if (index .Values .Release.Name).hasDatabase }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,8 +15,12 @@ spec:
       containers:
       - name: db
         image: {{ (index .Values .Release.Name).dbImage }}
+        env:
+        {{- if index .Values .Release.Name "dbEnv" }}
+        {{- toYaml (index .Values .Release.Name "dbEnv") | nindent 8 }}
+        {{- end }}
         ports:
-        - containerPort: {{ .Values.dbPort }}
+        - containerPort: {{ (index .Values .Release.Name).dbPort }}
 ---
 apiVersion: v1
 kind: Service
@@ -26,14 +30,6 @@ spec:
   selector:
     app: {{ .Release.Name }}-db
   ports:
-    {{- if (index .Values .Release.Name).extraPorts }}
-    {{- range (index .Values .Release.Name).extraPorts }}
-    - name: {{ .name }}
-      port: {{ .port }}
-      targetPort: {{ .port }}
-    {{- end }}
-    {{- else }}
     - port: {{ (index .Values .Release.Name).dbPort }}
       targetPort: {{ (index .Values .Release.Name).dbPort }}
-    {{- end }}
 {{- end }}

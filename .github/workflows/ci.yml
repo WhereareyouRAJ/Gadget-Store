@@ -8,7 +8,7 @@ jobs:
   build-all: 
     strategy:
       matrix: 
-        service: [ui, orders, catalog, checkout, cart]
+        service: [ui, orders, catalog, checkout, carts]
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout code

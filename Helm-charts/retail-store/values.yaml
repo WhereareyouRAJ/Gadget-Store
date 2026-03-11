@@ -3,8 +3,8 @@ global:
     repository: rajsingh8826
     tag: latest
     pullPolicy: IfNotPresent
-    containerPort: 8080
-    servicePort: 8080
+  containerPort: 8080
+  servicePort: 8080
 ui:
   serviceType: LoadBalancer
   env:
@@ -109,7 +109,7 @@ catalog:
     - name: RETAIL_CATALOG_PERSISTENCE_USERNAME
       value: "catalog_user"
 
-rabbitmq:
+rabbitmq-db:
   hasDatabase: true
   dbImage: rabbitmq:3-management
   extraPorts:
