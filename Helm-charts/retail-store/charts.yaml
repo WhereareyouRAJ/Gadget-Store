@@ -1,0 +1,5 @@
+apiVersion: v2
+name: retail-store
+description: A Helm chart for Retail store Microservices Application
+version: 0.1.0
+appVersion: "1.0.0"

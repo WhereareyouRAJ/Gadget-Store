@@ -35,28 +35,23 @@ jobs:
             rajsingh8826/${{ matrix.service }}:latest
             rajsingh8826/${{ matrix.service }}:${{ github.sha }}
   
-  deploy-simulation:
-    runs-on: ubuntu-latest
-    needs: build-all
+  deploy: 
     strategy:
-      matrix:
-        service: [ui, orders, checkout, cart, catalog]
-    steps:
+      matrix: 
+        service: [ui, orders, catalog, checkout, cart]
+    runs-on: ubuntu-latest
+    steps: 
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: "CD Simulation: Update Manifest"
+      # 1. Install Helm (The professional tool)
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+      # 2. Deploy using Helm (The "Deep" One-Liner)
+      - name: Helm Upgrade
         run: |
-          echo "Updating ${{ matrix.service}} manifest with new tag: ${{ github.sha }}"
-          #This sed commands simulates the manifests with new image tag.
-          sed -i "s|image: rajsingh8826/${{ matrix.service }}:latest|image: rajsingh8826/${{ matrix.service }}:${{ github.sha }}|g" ./Deployments-Manifests/${{ matrix.service }}/${{ matrix.service }}.yaml
+          helm upgrade --install ${{ matrix.service }} ./Helm-charts/retail-app \
+            --set global.image.tag=${{ github.sha }} \
+            --values ./Helm-charts/retail-app/values.yaml \
+            --namespace default --create-namespace --debug --dry-run
           
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add .
-          git commit -m "chore: Update $ {{ matrix.service }} image to ${{ github.sha }} [skip ci]"
-          
-          for i in {1..5}; do
-            git pull --rebase origin main && git push origin main && break || sleep 5
-          done
-          git push -u origin main
+          echo "CD Simulation: Successfully generated Helm manifest for ${{ matrix.service }} with tag ${{ github.sha }}"

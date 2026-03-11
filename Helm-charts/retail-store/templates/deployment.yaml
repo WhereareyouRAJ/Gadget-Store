@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ .Values.global.image.repository }}/{{ .Release.Name }}:{{ .Values.global.image.tag }}
+        imagePullPolicy: {{ .Values.global.image.pullPolicy }}
+        env:
+        # Load service-specific env from values.yaml
+        {{- if index .Values .Release.Name "env" }}
+        {{- toYaml (index .Values .Release.Name "env") | nindent 8 }}
+        {{- end }}
+
+        ports:
+        - containerPort: {{ .Values.global.containerPort }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  selector:
+    app: {{ .Release.Name }}
+  type: {{ (index .Values .Release.Name).serviceType | default "ClusterIP" }}
+  ports:
+  - protocol: TCP
+    port: {{ .Values.global.servicePort }}
+    targetPort: {{ .Values.global.containerPort }}

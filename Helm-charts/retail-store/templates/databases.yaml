@@ -1,0 +1,39 @@
+{{- if .Values.hasDatabase }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-db
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-db
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-db
+    spec:
+      containers:
+      - name: db
+        image: {{ (index .Values .Release.Name).dbImage }}
+        ports:
+        - containerPort: {{ .Values.dbPort }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-db
+spec:
+  selector:
+    app: {{ .Release.Name }}-db
+  ports:
+    {{- if (index .Values .Release.Name).extraPorts }}
+    {{- range (index .Values .Release.Name).extraPorts }}
+    - name: {{ .name }}
+      port: {{ .port }}
+      targetPort: {{ .port }}
+    {{- end }}
+    {{- else }}
+    - port: {{ (index .Values .Release.Name).dbPort }}
+      targetPort: {{ (index .Values .Release.Name).dbPort }}
+    {{- end }}
+{{- end }}
