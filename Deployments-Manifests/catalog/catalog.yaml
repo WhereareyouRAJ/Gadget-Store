@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: catalog
-          image: rajsingh8826/catalog:latest
+          image: rajsingh8826/catalog:1bd1ae9d9d904227759568bf832769bd79392d23
           ports: 
             - containerPort: 8080
           env: 

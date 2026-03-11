@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: ui
-        image: rajsingh8826/ui:latest
+        image: rajsingh8826/ui:1bd1ae9d9d904227759568bf832769bd79392d23
         env:
         - name: JAVA_OPTS
           value: "-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom"
