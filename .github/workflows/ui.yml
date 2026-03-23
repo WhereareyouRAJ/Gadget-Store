@@ -13,4 +13,4 @@ jobs:
     with:
       image_name: "retail-ui"
       context: "./src/ui/"
-    secrets: inherit
+    secrets: inherit 
