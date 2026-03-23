@@ -11,7 +11,7 @@ COPY go.mod go.sum ./
 # Downloading dependencies
 RUN go mod download
 
-# The Build  
+# The Build     
 COPY . .
 #CGO_ENABLED=0 creates a static binary which don't need a linux os to run.
 RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/catalog . 
