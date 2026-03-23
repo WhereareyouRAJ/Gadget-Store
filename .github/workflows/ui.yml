@@ -3,7 +3,7 @@ name: 🚀 UI CI
 on:
   push:
     paths:
-      - './src/ui/**'
+      - 'src/ui/**'
     branches:
       - main
 

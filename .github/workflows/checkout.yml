@@ -3,7 +3,7 @@ name: 🚀 Checkout CI
 on:
   push:
     paths:
-      - './src/checkout/**'
+      - 'src/checkout/**'
     branches:
       - main
 

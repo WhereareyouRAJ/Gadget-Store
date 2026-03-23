@@ -3,7 +3,7 @@ name: 🚀 Orders CI
 on:
   push:
     paths:
-      - './src/orders/**'
+      - 'src/orders/**'
     branches:
       - main
 
