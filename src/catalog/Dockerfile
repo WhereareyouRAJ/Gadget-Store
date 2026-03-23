@@ -17,7 +17,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/catalog . 
 
 # Stage 2: Final Stage
-# Scratch is an empty image of size 0MB, provided by docker.
+# Scratch is an empty image of size 0MB, provided by docker.         
 FROM scratch
 
 # We copy only the single binary from the builder stage, No Shell, No apt, No users.
