@@ -50,7 +50,8 @@ jobs:
       
       - name: 📝 Digital Signature
         uses: sigstore/cosign-installer@main
-        run: |
+        
+      - run: |
           cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${DOCKER_USER}/${IMG}:latest
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
