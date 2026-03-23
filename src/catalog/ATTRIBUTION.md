@@ -4,7 +4,7 @@ This software depends on external packages and source code.
 The applicable license information is listed below:
 
 ----
-     
+             
 ### dario.cat/mergo @1.0.0 - https://github.com/imdario/mergo.git
 
 Copyright (c) 2013 Dario Castañé. All rights reserved.
