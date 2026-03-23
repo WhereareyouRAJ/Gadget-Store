@@ -1,0 +1,16 @@
+name: 🚀 Checkout CI
+
+on:
+  push:
+    paths:
+      - './src/checkout/**'
+    branches:
+      - main
+
+jobs:
+  call-security-pipeline:
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      image_name: "retail-checkout"
+      context: "./src/checkout/"
+    secrets: inherit

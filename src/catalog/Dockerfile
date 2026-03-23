@@ -6,7 +6,7 @@ WORKDIR /src
 
 # Cache Management, We copy only the dependenies file first.
 # Copying dependencies files
-COPY go.mod go.sum ./
+COPY go.mod go.sum ./ 
 
 # Downloading dependencies
 RUN go mod download

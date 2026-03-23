@@ -1,0 +1,16 @@
+name: 🚀 UI CI
+
+on:
+  push:
+    paths:
+      - './src/ui/**'
+    branches:
+      - main
+
+jobs:
+  call-security-pipeline:
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      image_name: "retail-ui"
+      context: "./src/ui/"
+    secrets: inherit

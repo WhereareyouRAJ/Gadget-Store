@@ -1,0 +1,16 @@
+name: 🚀 Orders CI
+
+on:
+  push:
+    paths:
+      - './src/orders/**'
+    branches:
+      - main
+
+jobs:
+  call-security-pipeline:
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      image_name: "retail-orders"
+      context: "./src/orders/"
+    secrets: inherit

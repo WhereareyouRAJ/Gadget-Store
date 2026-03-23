@@ -1,0 +1,16 @@
+name: 🚀 Carts CI
+
+on:
+  push:
+    paths:
+      - './src/carts/**'
+    branches:
+      - main
+
+jobs:
+  call-security-pipeline:
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      image_name: "retail-carts"
+      context: "./src/carts/"
+    secrets: inherit

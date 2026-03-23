@@ -1,66 +1,35 @@
-# Build Stage
-FROM public.ecr.aws/amazonlinux/amazonlinux:2023 as build-env
+# Step 1: Build the UI
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
 
-# We tell DNF not to install Recommends and Suggests packages, keeping our
-# installed set of packages as minimal as possible.
-RUN dnf --setopt=install_weak_deps=False install -q -y \
-    maven \
-    java-21-amazon-corretto-headless \
-    which \
-    tar \
-    gzip \
-    && \
-    dnf clean all
+# Set the Working Directory
+WORKDIR /app
 
-ARG JAR_PATH
+# Cache Management  
+# Copying only the dependecies file first
+COPY pom.xml ./
 
-VOLUME /tmp
-WORKDIR /
+RUN mvn dependency:go-offline 
 
-COPY .mvn .mvn
-COPY mvnw .
-COPY pom.xml .
+COPY src ./src
 
-RUN chmod +x mvnw && sed -i 's/\r$//' mvnw
-RUN ./mvnw dependency:go-offline -B 
+RUN mvn clean package -DskipTests
 
-COPY ./src ./src
+# Step 2: Final Stage
+# Using Distroless Image for Java 21 on Debian 12, which only contains the JVM and its dependencies, 
+# No shell, No package manager and No terminal
+FROM gcr.io/distroless/java21-debian12
 
-RUN ./mvnw -DskipTests package -q && \
-    mv /target/carts-0.0.1-SNAPSHOT.jar /app.jar
+WORKDIR /app
 
-# Package Stage
-FROM public.ecr.aws/amazonlinux/amazonlinux:2023
+COPY --from=build /app/target/*.jar app.jar
 
-# We tell DNF not to install Recommends and Suggests packages, which are
-# weak dependencies in DNF terminology, thus keeping our installed set of
-# packages as minimal as possible.
-RUN dnf --setopt=install_weak_deps=False install -q -y \
-    java-21-amazon-corretto-headless \
-    shadow-utils \
-    && \
-    dnf clean all
-
-ENV APPUSER=appuser
-ENV APPUID=1000
-ENV APPGID=1000
-
-RUN useradd \
-    --home "/app" \
-    --create-home \
-    --user-group \
-    --uid "$APPUID" \
-    "$APPUSER"
+# Principle of least privilege
+# We run as non-root, a built-in user in Distroless
+USER nonroot:nonroot
 
 ENV JAVA_TOOL_OPTIONS=
 ENV SPRING_PROFILES_ACTIVE=prod
 
-WORKDIR /app
-USER appuser
-
-COPY ./ATTRIBUTION.md ./LICENSES.md
-COPY --chown=appuser:appuser --from=build-env /app.jar .
-
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
