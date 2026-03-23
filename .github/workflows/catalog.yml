@@ -6,10 +6,11 @@ on:
       - './src/catalog/**'
     branches:
       - main
+    workflow_dispatch:
     
 jobs:
   call-security-pipeline:
-    uses: ./.github/workflows/reusable-build.yml
+    uses: ./.github/workflows/security-pipeline.yml
     with:
       image_name: "retail-catalog"
       context: "./src/catalog/"
