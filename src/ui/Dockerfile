@@ -5,7 +5,7 @@ FROM maven:3.9-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 
 # Cache Management 
-# Copying only the dependecies file first
+# Copying only the dependecies file first   
 COPY pom.xml ./   
 
 RUN mvn dependency:go-offline 
