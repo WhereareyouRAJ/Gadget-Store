@@ -1,7 +1,7 @@
 name: 🛡️ Security Pipeline
 
 on:
-  workflow-call:
+  workflow_call:
     inputs:
       image_name:
         required: true
