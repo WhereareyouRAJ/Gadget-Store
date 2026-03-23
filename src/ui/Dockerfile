@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Cache Management 
 # Copying only the dependecies file first
-COPY pom.xml ./
+COPY pom.xml ./   
 
 RUN mvn dependency:go-offline 
 
