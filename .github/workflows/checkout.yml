@@ -12,5 +12,5 @@ jobs:
     uses: ./.github/workflows/security-pipeline.yml
     with:
       image_name: "retail-checkout"
-      context: "./src/checkout/"
+      context: "src/checkout/"
     secrets: inherit
