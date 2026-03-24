@@ -85,5 +85,8 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "packageManager": "yarn@4.11.0"
+  "packageManager": "yarn@4.11.0",
+  "resolutions": {
+    "form-data": "^2.5.4"
+  }
 }
