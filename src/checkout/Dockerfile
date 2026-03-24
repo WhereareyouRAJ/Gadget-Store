@@ -21,7 +21,7 @@ RUN yarn install
 # Stage 3: Final Stage
 FROM gcr.io/distroless/nodejs20-debian12
 
-COPY --from=modules /app/node_modules ./node_modules
+COPY --from=modules /node_modules ./node_modules
 COPY . .
 
 USER abc:abc
