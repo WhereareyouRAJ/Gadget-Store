@@ -3,7 +3,9 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
-COPY package.json ./
+COPY .yarnrc.yml ./
+COPY .yarn/ ./.yarn
+COPY package.json yarn.lock ./
 
 RUN corepack enable && corepack prepare yarn@4.11.0 --activate
 
