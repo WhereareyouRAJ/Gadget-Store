@@ -64,7 +64,7 @@ jobs:
         run: |
           echo "TIME: $(date)" >> release.log
           echo "IMAGE: ${{ inputs.image_name }}" >> release.log
-          echp "DIGEST: ${{ steps.build_step.outputs.digest }}" >> release.log
+          echo "DIGEST: ${{ steps.build_step.outputs.digest }}" >> release.log
           echo "SBOM: ${{ steps.build_step.outputs.sbom }}" >> release.log
           echo "PROVENANCE: ${{ steps.build_step.outputs.provenance }}" >> release.log
 
