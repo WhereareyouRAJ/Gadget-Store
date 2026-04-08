@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- statefulset.yaml
+- service.yaml
+
+    
+secretGenerator:
+- literals:
+  - MYSQL_ROOT_PASSWORD=12345
+  - MYSQL_USER=catalog_user
+  - MYSQL_PASSWORD=12345
+  - MYSQL_DATABASE=catalogdb
+  - MYSQL_ALLOW_EMPTY_PASSWORD=true
+  name: catalog-db-secret
+
+labels:
+  - pairs:
+      app: catalog-db

@@ -34,4 +34,4 @@ USER abc:abc
 
 EXPOSE 8080   
 
-ENTRYPOINT ["server,js"]
+ENTRYPOINT ["server.js"]

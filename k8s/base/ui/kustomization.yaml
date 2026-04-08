@@ -1,0 +1,22 @@
+resources:
+- deployment.yaml
+- service.yaml
+- ingress.yaml
+
+configMapGenerator:
+- literals:
+  - JAVA_OPTS=-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom
+  - SERVER_TOMCAT_ACCESSLOG_ENABLED=true
+  - RETAIL_UI_ENDPOINTS_CATALOG=http://catalog:8080
+  - RETAIL_UI_ENDPOINTS_CARTS=http://carts:8080
+  - RETAIL_UI_ENDPOINTS_ORDERS=http://orders:8080
+  - RETAIL_UI_ENDPOINTS_CHECKOUT=http://checkout:8080
+  name: ui-config
+
+generatorOptions: {}
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app: ui

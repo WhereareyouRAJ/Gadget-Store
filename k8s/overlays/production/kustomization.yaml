@@ -1,0 +1,76 @@
+namespace: retail-store-prod
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/ui
+  - ../../base/catalog
+  - ../../base/catalog-db
+  - ../../base/carts
+  - ../../base/carts-db
+  - ../../base/checkout
+  - ../../base/checkout-db
+  - ../../base/orders
+  - ../../base/orders-db
+  - ../../base/rabbitmq
+
+patches:
+  - target:
+      kind: Deployment
+      name: ui
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  
+  - target:
+      kind: Deployment
+      name: catalog
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+
+  - target:
+      kind: Deployment
+      name: carts
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  
+  - target:
+      kind: Deployment
+      name: checkout
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  
+  - target:
+      kind: Deployment
+      name: orders
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  
+images:
+  - name: rajsingh8826/retail-ui
+    newTag: "latest"
+  
+  - name: rajsingh8826/retail-catalog
+    newTag: "latest"
+  
+  - name: rajsingh8826/retail-carts
+    newTag: "latest"
+  
+  - name: rajsingh8826/retail-checkout
+    newTag: "latest"
+  
+  - name: rajsingh8826/retail-orders
+    newTag: "latest"
+  
+  - name: rabbitmq:3-management-alpine
+    newTag: "3-management-alpine"

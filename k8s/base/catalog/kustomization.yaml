@@ -1,0 +1,19 @@
+resources:
+- deployment.yaml
+- service.yaml
+
+
+configMapGenerator:
+- literals:
+  - RETAIL_CATALOG_PERSISTENCE_ENDPOINT=catalog-db:3306
+  - RETAIL_CATALOG_PERSISTENCE_PASSWORD=12345
+  - RETAIL_CATALOG_PERSISTENCE_PROVIDER=mysql
+  - RETAIL_CATALOG_PERSISTENCE_NAME=catalogdb
+  - RETAIL_CATALOG_PERSISTENCE_USERNAME=catalog_user
+  name: catalog-config
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app: catalog

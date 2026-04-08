@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders
+  template:
+    metadata:
+      labels:
+        app: orders
+    spec:
+      initContainers:
+      - name: wait-for-postgres
+        image: busybox:1.28
+        command: ['sh', '-c', "until nc -z orders-db 5432; do echo waiting for postgres; sleep 2; done;"]
+      
+      containers:
+      - name: orders
+        image: rajsingh8826/retail-orders:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - secretRef:
+              name: orders-secret
+        
+        resources:
+          limits: 
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false

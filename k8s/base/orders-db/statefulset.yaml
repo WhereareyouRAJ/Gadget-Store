@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: orders-db
+  namespace: retail-store
+spec:
+  serviceName: "orders-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-db
+  template:
+    metadata:
+      labels:
+        app: orders-db
+    spec:
+      containers:
+      - name: orders-db
+        image: postgres:16.1
+        envFrom:
+        - secretRef:
+            name: orders-db-secret
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: orders-db-storage
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: orders-db-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi

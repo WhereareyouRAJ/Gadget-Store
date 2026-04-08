@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: catalog-db
+  namespace: retail-store
+spec:
+  serviceName: "catalog-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog-db
+  template:
+    metadata:
+      labels:
+        app: catalog-db
+    spec:
+      containers:
+      - name: catalog-db
+        image: mariadb:10.9
+        envFrom:
+        - secretRef:
+            name: catalog-db-secret
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: catalog-db-storage
+          mountPath: /var/lib/mysql
+          
+  volumeClaimTemplates:
+  - metadata:
+      name: catalog-db-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
+        

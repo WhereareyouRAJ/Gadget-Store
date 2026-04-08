@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carts
+  namespace: retail-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carts
+  template:
+    metadata:
+      labels:
+        app: carts
+    spec:
+      initContainers:
+      - name: wait-for-dynamodb
+        image: busybox:1.28
+        command: ['sh', '-c', "until nc -z carts-db 8000; do echo waiting for dynamodb; sleep 2; done;"]
+      containers:
+      - name: carts
+        image: rajsingh8826/retail-carts:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: carts-config
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "300m"
+          requests:
+            memory: "128Mi"
+            cpu: "150m"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false

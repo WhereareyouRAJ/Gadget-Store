@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- service.yaml
+
+labels:
+- includeSelectors: true
+  pairs:
+    app: carts
+
+   
+configMapGenerator:
+- literals:
+  - SERVER_TOMCAT_ACCESSLOG_ENABLED=true
+  - RETAIL_CART_PERSISTENCE_PROVIDER=dynamodb
+  - RETAIL_CART_PERSISTENCE_DYNAMODB_ENDPOINT=http://carts-db:8000
+  - RETAIL_CART_PERSISTENCE_DYNAMODB_CREATE_TABLE=true
+  - AWS_REGION=ap-south-1
+  name: carts-config
+

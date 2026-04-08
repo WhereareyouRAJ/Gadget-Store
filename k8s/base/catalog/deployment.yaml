@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  namespace: retail-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nc -z catalog-db 3306; do echo "Waiting for catalog-db..."; sleep 2; done;']
+      
+      containers:
+      - name: catalog
+        image: rajsingh8826/retail-catalog:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: catalog-config
+        
+        resources:
+          limits: 
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+

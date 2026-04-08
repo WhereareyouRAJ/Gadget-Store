@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui
+  namespace: retail-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+      - name: ui
+        image: rajsingh8826/retail-ui:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: ui-config
+        
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000  
+          allowPrivilegeEscalation: false
+    
+        
+          

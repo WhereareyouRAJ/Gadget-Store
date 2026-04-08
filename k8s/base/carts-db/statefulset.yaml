@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: carts-db
+  namespace: retail-store
+spec:
+  serviceName: "carts-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carts-db
+  template:
+    metadata:
+      labels:
+        app: carts-db
+    spec:
+      containers:
+        - name: carts-db
+          image: amazon/dynamodb-local:latest
+          ports:
+          - containerPort: 8000
+          args: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/data"]
+          volumeMounts:
+          - name: carts-db-storage
+            mountPath: /data
+          
+  volumeClaimTemplates:
+  - metadata:
+      name: carts-db-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
