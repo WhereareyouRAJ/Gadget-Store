@@ -26,12 +26,14 @@ RUN ls -la /app/node_modules
 
 # Stage 3: Final Stage
 FROM gcr.io/distroless/nodejs20-debian12
+WORKDIR /app
 
-COPY --from=modules /app/node_modules ./node_modules
+
+COPY --from=modules /app/node_modules /app/node_modules 
 COPY . .
 
-USER abc:abc
+USER 65532:65532
 
 EXPOSE 8080   
 
-ENTRYPOINT ["server.js"]
+CMD ["server.js"]
