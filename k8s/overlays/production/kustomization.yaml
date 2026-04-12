@@ -64,8 +64,6 @@ patches:
 images:
 - name: rabbitmq:3-management-alpine
   newTag: 3-management-alpine
-- name: rajsingh8826/
-  newTag: a48eb656511146548d431a6455c5f48b7cc2204b
 - name: rajsingh8826/retail-carts
   newTag: latest
 - name: rajsingh8826/retail-catalog
