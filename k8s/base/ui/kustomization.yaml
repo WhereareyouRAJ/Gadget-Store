@@ -11,6 +11,8 @@ configMapGenerator:
   - RETAIL_UI_ENDPOINTS_CARTS=http://carts:8080
   - RETAIL_UI_ENDPOINTS_ORDERS=http://orders:8080
   - RETAIL_UI_ENDPOINTS_CHECKOUT=http://checkout:8080
+  - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+  - LOGGING_LEVEL_ROOT=INFO
   name: ui-config
 
 generatorOptions: {}

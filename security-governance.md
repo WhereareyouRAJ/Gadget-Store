@@ -1,4 +1,4 @@
-# Section 1: Software Supply Chain Integrity (SLSA Level 2)
+# 🛡️Section 1: Software Supply Chain Integrity (SLSA Level 2)
 
 **Immutable Identification:** All deployments are tracked via **SHA-256 Digests** rather than mutable Docker Tags. This eliminates "Tag-Switching" attacks.
 
@@ -8,7 +8,7 @@
 
 ---
 
-# Section 2: Automated Governance (Policy-as-Code)
+# 🛡️Section 2: Automated Governance (Policy-as-Code)
 
 **Security Gates:** The pipeline is configured with **Grype** to automatically block any build containing **CRITICAL** vulnerabilities.
 

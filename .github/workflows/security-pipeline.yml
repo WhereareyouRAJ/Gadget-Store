@@ -66,8 +66,7 @@ jobs:
           echo "IMAGE: ${{ inputs.image_name }}" >> release.log
           echo "DIGEST: ${{ steps.build_step.outputs.digest }}" >> release.log
           echo "SBOM_ID: ${{ steps.build_step.outputs.metadata }}" >> release.log
-          echo "PROVENANCE: ${{ steps.build_step.outputs.provenance }}" >> release.log
-
+          
       - name: 📤 Upload release log
         uses: actions/upload-artifact@v4
         with:

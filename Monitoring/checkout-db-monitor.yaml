@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: checkout-db-monitor
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-redis-exporter
+      app.kubernetes.io/instance: checkout-db-exporter
+  namespaceSelector:
+    matchNames:
+      - retail-store-prod
+  endpoints:
+  - port: redis-exporter
+    interval: 30s

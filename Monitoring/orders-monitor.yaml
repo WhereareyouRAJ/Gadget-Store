@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: orders-db-monitor
+  namespace: monitoring
+  labels:
+    release: monitoring # Crucial: connects this monitor to your Prometheus instance
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-postgres-exporter
+      app.kubernetes.io/instance: orders-db-exporter
+  namespaceSelector:
+    matchNames:
+      - retail-store-prod
+  endpoints:
+  - port: http 
+    interval: 30s
+    path: /metrics
+

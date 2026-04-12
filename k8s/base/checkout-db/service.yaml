@@ -6,6 +6,7 @@ spec:
   selector:
     app: checkout-db
   ports:
-    - port: 6379
+    - name: redis-exporter
+      port: 6379
       targetPort: 6379
   type: ClusterIP

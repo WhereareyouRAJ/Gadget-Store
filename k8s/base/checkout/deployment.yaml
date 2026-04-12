@@ -17,8 +17,6 @@ spec:
       containers:
       - name: checkout
         image: rajsingh8826/retail-checkout:latest
-        command: ["/nodejs/bin/node"]
-        args: ["/app/server.js"] 
         ports:
         - containerPort: 8080
         envFrom:
