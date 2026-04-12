@@ -24,7 +24,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Principle of least privilege
-# We run as non-root, a built-in user in Distroless
+# We run as non-root, a built-in user in Distroless    
 USER nonroot:nonroot
 
 ENV JAVA_TOOL_OPTIONS=
