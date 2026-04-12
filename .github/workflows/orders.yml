@@ -14,3 +14,25 @@ jobs:
       image_name: "retail-orders"
       context: "./src/orders/"
     secrets: inherit
+  
+  update-manifests:
+    needs: call-security-pipeline
+    runs-on: ubuntu-latest
+    steps:
+    - name: 📥 Checkout Manifests
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITOPS_TOKEN }} 
+    - name: 📝 Update Kustomize Tag
+      run: |
+          # Use Kustomize to update the image tag to the current Git SHA
+          cd k8s/overlays/production
+          kustomize edit set image ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.image_name }}:${{ github.sha }}
+
+    - name: 🚀 Push to GitHub
+      run: |
+          git config --global user.name "GitOps-Bot"
+          git config --global user.email "bot@gadget-store.com"
+          git add .
+          git commit -m "deploy: update ${{ inputs.image_name }} to ${{ github.sha }} [skip ci]"
+          git push
