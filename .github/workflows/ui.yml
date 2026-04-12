@@ -27,7 +27,7 @@ jobs:
       run: |
           # Use Kustomize to update the image tag to the current Git SHA
           cd k8s/overlays/production
-          kustomize edit set image ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.image_name }}:${{ github.sha }}
+          kustomize edit set image ${{ vars.DOCKERHUB_USERNAME }}/${{ image_name }}:${{ github.sha }}
 
     - name: 🚀 Push to GitHub
       run: |
