@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Step 1: Build the UI        
+=======
+# Step 1: Build the UI             
+>>>>>>> refs/remotes/origin/main
 FROM maven:3.9-eclipse-temurin-21-alpine AS build
 
 # Set the Working Directory 

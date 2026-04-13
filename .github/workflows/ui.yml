@@ -18,6 +18,8 @@ jobs:
   update-manifests:
     needs: call-security-pipeline
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: "retail-ui"
     steps:
     - name: 📥 Checkout Manifests
       uses: actions/checkout@v4
@@ -27,12 +29,12 @@ jobs:
       run: |
           # Use Kustomize to update the image tag to the current Git SHA
           cd k8s/overlays/production
-          kustomize edit set image ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.image_name }}:${{ github.sha }}
+          kustomize edit set image ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}=${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
     - name: 🚀 Push to GitHub
       run: |
           git config --global user.name "GitOps-Bot"
           git config --global user.email "bot@gadget-store.com"
           git add .
-          git commit -m "deploy: update ${{ inputs.image_name }} to ${{ github.sha }} [skip ci]"
+          git commit -m "deploy: update ${{ env.IMAGE_NAME }} to ${{ github.sha }} [skip ci]"
           git push
